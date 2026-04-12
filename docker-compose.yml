@@ -1,0 +1,26 @@
+services:
+  paddledetection:
+    image: paddlecloud/paddledetection:2.4-gpu-cuda11.2-cudnn8-latest
+    container_name: paddledetection
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    volumes:
+      - .:/mnt/PaddleDetection
+      - paddle_data:/root/.cache
+    ports:
+      - "8888:8888"
+    working_dir: /mnt/PaddleDetection
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  paddle_data:
